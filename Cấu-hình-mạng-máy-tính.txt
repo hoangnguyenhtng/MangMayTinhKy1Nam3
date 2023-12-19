@@ -1,0 +1,104 @@
+Cấu hình mạng máy tính
+
+* Tạo vlan
+	* config t
+	* vlan <number>
+	* name <name_vlan>
+	* end
+* Thêm cổng vào vlan
+	* config t
+	* inter fa0/<number>
+	* switchport mode access
+	* switchport access vlan <number>
+	* end
+* Cấu hình cổng trunk
+	* config t
+	* inter gi0/<number>
+	* switchport mode trunk
+	* end
+* Cấu hình full duplex cho các cổng
+	* config t
+	* inter fa<num>/<num>
+	* duplex full
+	* note: phải bật ở cả hai đầu thì kết nối mới up
+* Cấu hình ip cho cổng router:
+	* config t
+	* inter fa<n>/<n>
+	* ip address <ip> <subnet>
+	* ipv6 address <ipv6/subnet>
+	* no shut
+* Cấu hình dhcp v4 trên router
+	* config t
+	* ip dhcp excluded-address <ipv4> <ipv4>
+	* ip dhcp pool <poolName>
+	* network <netId> <subnet>
+	* default-router <ip_router_gate>
+	* dns-server <ip_server>
+	* end
+* Cấu hình dhcp v6 trên router
+	* config t
+	* ipv6 dhcp pool <pool_name>
+	* dns-server <ip_server>
+	* exit
+	* inter fa<num>/<num>
+	* ipv6 nd other-config-flag
+	* ipv6 dhcp server <pool_name>
+	* end
+* Server cung cấp dhcp v4
+	* vào dhcp, bật on
+	* cấu hình đè vào pool đã có.
+* Server cung cấp dhcp v6
+	* vào dhcpv6, bật on
+	* tạo pool và dns-server
+	* tạo ipv6 prefix: ghi vào ô ipv6 là netID.
+* Cấu hình routing (mode config)
+	* Tĩnh
+		* ip route <NetID-v4> <Subnet> <IpGate>
+		* ipv6 route <NetID-v6/Subnet> <IpGate>
+	* Động
+		* ip route 0.0.0.0 0.0.0.0 <IpGate>
+		* ipv6 route ::/0 <IpGate>
+* Cấu Hình DNS trên Server
+	* Bản ghi SOA
+		* Name: là tên miền
+		* primary servername: là tên máy chủ
+		* mail box: dnsmaster@<tên miền>
+		* Minimum TTL: 86400
+		* RetryTime: 3600
+		* Refesh Time: 10800
+		* Expiry Time: 1209600
+	* Bản ghi NS
+		* name: là tên miền
+		* servername: là tên máy chủ
+	* Bản ghi A (IPv4):
+		* Name: là tên máy chủ
+		* Address: ipv4 của server
+	* Bản ghi AAAA (ipv6)
+		* Name: tên máy chủ
+		* Address: ipv6 của server
+	* Testing:
+		* mở termial: nslookup
+		* viết tên máy chủ và nhận kết quả.
+* Cấu hình Web
+	* Vào Http Service: thêm file html
+	* Bản ghi A(ipv4)
+		* name: tên miền Web (www)
+		* address: ipv4 web server
+	* Bản ghi AAAA(ipv6)
+		* name: tên miền web (www)
+		* address: ipv6 web server
+	* test: sử dụng nslookup gọi đến tên miền web (www)
+* Cấu hình Mail:
+	* Bản ghi A:
+		* name: tên miền mail (mail.)
+		* address: ipv4 mail server
+	* Bản ghi AAAA:
+		* name: tên miền mail (mail.)
+		* address: ipv6 mail server
+	* Vào Email Service tạo các tài khoản: nhớ set domain name (utc.edu.vn).
+	* vào máy pc, tạo email
+	
+	
+
+	
+	
